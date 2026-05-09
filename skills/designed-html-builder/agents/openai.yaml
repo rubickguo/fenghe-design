@@ -1,0 +1,4 @@
+interface:
+  display_name: "Designed HTML Builder"
+  short_description: "Polished HTML and resume design QA"
+  default_prompt: "Design or improve this website, HTML page, or resume with a stronger visual system; when exporting to PDF, apply mandatory rendered-page QA."
