@@ -15,11 +15,24 @@
 
 ## 核心思路
 
-### 1. 先判断场景，再做设计
+### 1. 把设计请求拆成可执行模式
+
+这个 Skill 不是只说“参考 Impeccable”，而是把它的设计工作方式内化成模式：
+
+- `shape`：方向不清时先定设计判断
+- `craft`：从零做页面或 HTML
+- `critique`：先指出问题再改
+- `polish`：在保留意图的前提下打磨现有页面
+- `harden`：用真实和极端内容检查稳定性
+- `typeset`：处理中文、中英混排、简历和打印阅读
+- `layout`：处理层级、栅格、密度和节奏
+- `colorize`：处理色彩角色和对比
+
+### 2. 先判断场景，再做设计
 
 网站、App 工具、简历、Dashboard、作品集、报告、打印 PDF 的设计密度不同。这个 Skill 要求先判断页面的真实用途，而不是直接生成一个通用模板。
 
-### 2. 先建立设计系统，再写页面
+### 3. 用 DESIGN.md 沉淀可复用设计系统
 
 生成 HTML 前，需要先确定：
 
@@ -30,19 +43,24 @@
 - 响应式行为
 - 打印或 PDF 约束
 
-### 3. 反通用 AI 模板感
+如果项目会被持续维护，应创建或读取 `DESIGN.md`，把主题、颜色角色、字体规则、组件规范、响应式行为和 AI 后续编辑规则写成项目合约，而不是只在聊天里描述。
+
+### 4. 反通用 AI 模板感
 
 Skill 明确避免：
 
 - 默认 AI SaaS 页面风格
 - 一整页紫蓝渐变
 - 装饰性光斑、圆球、背景 blob
+- 渐变字作为主要层级
+- 侧边色条卡片作为默认样式
+- 玻璃拟态作为装饰
 - 所有内容都包成卡片
 - 卡片套卡片
 - 灰字压在彩色背景上
 - 只追求好看但不利于阅读和使用
 
-### 4. 重视中文与中英混排
+### 5. 重视中文与中英混排
 
 这个 Skill 特别关注：
 
@@ -53,7 +71,7 @@ Skill 明确避免：
 - 移动端中文长句阅读
 - PDF 中字号、行高、留白和断页
 
-### 5. HTML 转 PDF 必须视觉校验
+### 6. HTML 转 PDF 必须视觉校验
 
 如果任务涉及 HTML 转 PDF，应配合 `html-to-pdf-qa` 工作流：
 
@@ -70,8 +88,10 @@ skills/designed-html-builder/
 ├── SKILL.md
 ├── agents/openai.yaml
 └── references/
+    ├── design-md-contract.md
     ├── design-md-template.md
     ├── design-rubric.md
+    ├── impeccable-internalized.md
     └── resume-html-design.md
 ```
 
@@ -83,13 +103,13 @@ skills/designed-html-builder/
 cp -R skills/designed-html-builder ~/.codex/skills/
 ```
 
-## 来源参考
+## 已内化的方法
 
-这个 Skill 的设计吸收了三个方向：
+这个 Skill 的设计吸收并内化了三个方向：
 
-- `pbakaus/impeccable`：设计审查、打磨、反通用 AI 视觉套路
-- `VoltAgent/awesome-design-md`：用 `DESIGN.md` 沉淀项目级设计系统
-- `fonted-design`：未确认到明确同名仓库，因此目前作为字体、排版和中英混排层处理
+- `pbakaus/impeccable`：不是只引用名称，而是内化为 mode routing、preflight gates、critique/polish/harden、anti-pattern 和 visual QA 规则。
+- `VoltAgent/awesome-design-md`：不是只引用名称，而是内化为 `DESIGN.md` 合约、语义 token、组件状态、响应式和 agent prompt guide。
+- `fonted-design`：作为字体、排版和中英混排层处理，强调字体层级、行长、行高、数字/URL/英文长词换行和打印可读性。
 
 ## License
 

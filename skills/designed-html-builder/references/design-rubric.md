@@ -8,6 +8,8 @@ Use this checklist when designing or reviewing websites, web apps, HTML pages, d
 - The page supports the user's actual workflow instead of presenting a generic marketing layout.
 - The content hierarchy is obvious when scanning for 5 seconds.
 - The design has a coherent point of view, not a pile of fashionable effects.
+- The visual register matches the surface: brand, product/app, dashboard, document, resume, portfolio, landing page, or print.
+- The design avoids category reflex: it does not look like the first obvious template for its category.
 
 ## Typography
 
@@ -30,6 +32,7 @@ Use this checklist when designing or reviewing websites, web apps, HTML pages, d
 ## Color And Contrast
 
 - Colors have roles rather than one-off decoration.
+- A color strategy is chosen before individual colors: restrained, committed accent, full palette, or immersive/drenched.
 - Text contrast is strong enough on every background.
 - Muted text remains readable.
 - Avoid gray text on saturated or image backgrounds.
@@ -41,6 +44,7 @@ Use this checklist when designing or reviewing websites, web apps, HTML pages, d
 - Buttons, tabs, toggles, sliders, menus, and inputs match the expected control type.
 - Icons are used for familiar tool actions when available.
 - States exist for hover, focus, selected, disabled, loading, and empty data where relevant.
+- Empty, error, disabled, loading, and overflow states are designed, not left to browser defaults.
 - UI text fits inside controls at all target widths.
 - Error and empty states are useful, not generic.
 
@@ -63,8 +67,12 @@ Use this checklist when designing or reviewing websites, web apps, HTML pages, d
 - Generic AI SaaS template look.
 - Oversized hero typography inside compact tools.
 - Purple-blue gradients used as the entire visual idea.
+- Gradient text used as the main hierarchy device.
 - Decorative orbs, blobs, or bokeh backgrounds.
+- Side-stripe cards as the default visual treatment.
+- Glassmorphism used as decoration rather than function.
 - Every section wrapped in a card.
+- Identical card grids used for unrelated content.
 - Weak hierarchy hidden behind long text blocks.
 - Pixel-perfect desktop with broken mobile.
 - A beautiful HTML page that fails print or PDF output.
