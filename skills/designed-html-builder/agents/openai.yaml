@@ -1,4 +1,4 @@
 interface:
   display_name: "Designed HTML Builder"
-  short_description: "Executable HTML design workflow with runtime audits"
-  default_prompt: "Design or improve this website, HTML page, resume, or DESIGN.md by first running the design-context loader, emitting DHB_PREFLIGHT, using Impeccable and DESIGN.md runtime checks when available, falling back honestly to vendored references when unavailable, and running visual/PDF QA as needed."
+  short_description: "Lightweight HTML design with optional task packs"
+  default_prompt: "Design or improve this website, HTML page, resume, or DESIGN.md using the lightweight kernel first. Load task-specific references or run runtime QA only when the task calls for resume/print, DESIGN.md, critique, audit, production-ready review, or PDF output."

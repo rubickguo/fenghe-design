@@ -65,6 +65,10 @@ function runImpeccable() {
     output.impeccable.reason = 'command failed';
     output.fallbackRequired = true;
     output.notes.push(`impeccable command failed:${result.error}`);
+  } else if (result.exitCode !== 0 && output.impeccable.findings.length === 0) {
+    output.impeccable.reason = 'command failed';
+    output.fallbackRequired = true;
+    output.notes.push(`impeccable command failed:exit ${result.exitCode}`);
   }
 }
 
@@ -86,6 +90,10 @@ function runDesignMd() {
     output.designmd.reason = 'command failed';
     output.fallbackRequired = true;
     output.notes.push(`designmd command failed:${result.error}`);
+  } else if (result.exitCode !== 0) {
+    output.designmd.reason = 'command failed';
+    output.fallbackRequired = true;
+    output.notes.push(`designmd command failed:exit ${result.exitCode}`);
   }
 }
 

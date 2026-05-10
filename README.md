@@ -15,13 +15,13 @@
 
 ## 核心思路
 
-### 1. 先跑上下文和 runtime bridge
+### 1. 轻内核优先，按需升级
 
-这个 Skill 不再只说“参考 Impeccable / DESIGN.md”，而是要求先执行：
+这个 Skill 默认只加载 `SKILL.md`，适合普通 HTML 生成、小改样式和简单 polish。只有命中特定任务时才升级：
 
-- `scripts/load-design-context.mjs`：读取 `PRODUCT.md`、`DESIGN.md`、`DESIGN.json`、CSS 变量、Tailwind、组件和 HTML 入口。
-- `scripts/run-design-audit.mjs`：在可用时运行 `npx impeccable --json <target>` 和 `npx @google/design.md lint DESIGN.md --format json`。
-- 如果工具不可用，必须明确报告 skipped reason，并 fallback 到本地 references。
+- Layer 0：只读内核，不自动加载 references。
+- Layer 1：按任务加载 resume、DESIGN.md、rubric、harden 等 reference。
+- Layer 2：用户要求严格 QA、PDF、生产级、设计系统验证时，才运行脚本、截图、PDF QA 或 runtime audit。
 
 ### 2. 把设计请求拆成可执行模式
 
@@ -120,7 +120,7 @@ cp -R skills/designed-html-builder ~/.codex/skills/
 
 这个 Skill 的设计吸收并内化了三个方向：
 
-- `pbakaus/impeccable`：不是只引用名称，而是内化为 mode routing、preflight gates、critique/polish/harden、anti-pattern 和 visual QA 规则。
+- `pbakaus/impeccable`：内化为按需的 mode routing、critique/polish/harden、anti-pattern 和 visual QA 规则；不会默认运行重流程。
 - `VoltAgent/awesome-design-md`：不是只引用名称，而是内化为 `DESIGN.md` 合约、语义 token、组件状态、响应式和 agent prompt guide。
 - `fonted-design`：作为字体、排版和中英混排层处理，强调字体层级、行长、行高、数字/URL/英文长词换行和打印可读性。
 

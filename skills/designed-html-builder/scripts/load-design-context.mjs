@@ -201,6 +201,13 @@ function collectSignals(allFiles) {
   }
 
   const cssFiles = allFiles.filter(f => /\.(css|scss|sass|less)$/i.test(f));
+  const styleFiles = cssFiles.map(rel);
+  const themeFiles = allFiles
+    .filter(f => /(^|\/)(theme|themes|tokens|design-tokens|style-dictionary|variables)[^/]*\.(js|ts|mjs|cjs|json|css|scss)$/i.test(f))
+    .map(rel);
+  const tokenFiles = allFiles
+    .filter(f => /(^|\/)(tokens|design-tokens|design_tokens|style-dictionary|variables)[^/]*\.(json|js|ts|mjs|cjs|css|scss)$/i.test(f))
+    .map(rel);
   const cssVariables = [];
   for (const file of cssFiles) {
     const content = readFileSafe(file);
@@ -220,6 +227,9 @@ function collectSignals(allFiles) {
 
   return {
     stack,
+    styleFiles,
+    themeFiles,
+    tokenFiles,
     cssVariables,
     tailwindConfig: tailwindConfig ? rel(tailwindConfig) : null,
     componentFiles,

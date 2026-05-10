@@ -1,5 +1,22 @@
 # Resume HTML Design
 
+## Use when
+
+- The task is resume, CV, print HTML, or PDF-ready layout.
+- The document needs readable density, page-break control, or Chinese-English typography.
+
+## Do not use when
+
+- The task is a normal landing page, dashboard, or app UI.
+- The task only creates or validates a project `DESIGN.md`.
+
+## Key outputs
+
+- readable evidence density
+- print-safe layout
+- mixed Chinese-English typography
+- PDF readiness checks
+
 Use this reference for resume HTML, print-ready career pages, and PDF-bound documents.
 
 ## Resume Design Goal

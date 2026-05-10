@@ -1,167 +1,120 @@
 ---
 name: designed-html-builder
-description: "Design or improve websites, HTML pages, resume HTML, portfolio pages, landing pages, product pages, dashboards, reports, and print-ready web documents with executable design-system context loading, Impeccable runtime/fallback checks, Google DESIGN.md linting, typography/layout/color guidance, browser visual QA, and HTML-to-PDF QA handoff."
+description: "Design or improve HTML pages, resume HTML, portfolio pages, landing pages, product pages, dashboards, reports, print-ready documents, and DESIGN.md systems with a lightweight kernel, task-specific references, optional runtime audits, and HTML-to-PDF QA handoff when requested."
 ---
 
 # Designed HTML Builder
 
 ## Purpose
 
-Create or improve HTML/CSS and design-system artifacts with real project context, not generic design advice. This skill must:
+Create or improve HTML/CSS and design-system artifacts without defaulting to a heavy audit flow. Start with the kernel only, then load references or run tools only when the task demands it.
 
-- load `PRODUCT.md`, `DESIGN.md`, `DESIGN.json`, existing styles, components, and local references before UI mutation
-- run runtime tools when available: `impeccable_cli` and `google_design_md_cli`
-- explicitly fallback to vendored references when tools are unavailable
-- preserve the original strengths: Chinese-English typography, resume HTML, print CSS, and mandatory PDF visual QA
+Core strengths:
+- polished HTML/CSS for websites, product UI, dashboards, portfolios, and reports
+- resume, print, PDF-ready layout, and Chinese-English typography
+- optional `DESIGN.md` creation/update using Google-compatible frontmatter and prose
+- optional runtime audit through Impeccable and Google DESIGN.md lint
 
-## Runtime Tool Bridge
+## Layered Loading Model
 
-Use runtime tools when Bash, Node/npm, and network access allow it. Never claim a runtime ran unless the command actually ran.
+Layer 0: Kernel
+- Default mode. Read only this `SKILL.md`.
+- Use for simple standalone HTML, small style changes, light polish, and normal implementation.
+- Do not load all references or run runtime tools preemptively.
 
-Runtime names:
+Layer 1: Task Pack
+- Load only the reference files matched by the router.
+- Use when the task clearly involves resume/print, DESIGN.md, critique/polish, or hardening.
 
-- `runtime: impeccable_cli`: `npx impeccable --json <markup-target>` or `npx impeccable detect --json <markup-target>`
-- `runtime: google_design_md_cli`: `npx @google/design.md lint DESIGN.md --format json`
-- `fallback: vendored_reference`: this skill's local `references/*.md`
+Layer 2: Runtime / Deep QA
+- Use only when the user asks for strict review, production-ready quality, full audit, PDF, design-system validation, or comprehensive QA.
+- Runtime tools include `scripts/load-design-context.mjs`, `scripts/run-design-audit.mjs`, browser screenshots, and `html-to-pdf-qa`.
 
-Required behavior:
+## Fast Examples
 
-1. Start design work with:
+- "做一个 HTML 页面" -> kernel only.
+- "优化这个页面观感" -> load `design-rubric.md` only if local inspection is not enough.
+- "生成/优化简历或 PDF" -> load `resume-html-design.md`; use `html-to-pdf-qa` when PDF is requested.
+- "创建 DESIGN.md" -> load `design-md-contract.md` + `design-md-template.md`.
+- "严格审查/生产级 QA" -> Layer 2 runtime/deep QA.
 
-   ```bash
-   node skills/designed-html-builder/scripts/load-design-context.mjs
-   ```
+## Minimal Workflow
 
-   Consume the full JSON. Do not pipe it through `head`, `tail`, `grep`, or truncating tools. If the script cannot run, manually read the same context and report `context=partial`.
+1. Classify the task: simple build, polish, resume/print, DESIGN.md, critique/audit, harden, or PDF.
+2. Apply the Loading Router. Start with kernel only unless a trigger matches.
+3. Inspect the relevant project files before editing. For simple tasks, this can be direct file reading.
+4. Preserve existing design conventions before adding new ones.
+5. Edit only the files needed for the task.
+6. Verify proportionally: quick local check for small edits; screenshots/runtime/PDF QA only when escalated.
+7. Report what changed and what was checked.
 
-2. For markup, directories, or URLs that can be scanned, run:
+## Loading Router
 
-   ```bash
-   node skills/designed-html-builder/scripts/run-design-audit.mjs <target>
-   ```
-
-   The script tries Impeccable and DESIGN.md lint, captures exit codes, stderr, stdout, and normalized findings.
-
-3. When browser automation and a browsable target are available, prefer visual QA via screenshots. If an Impeccable live overlay is available in the environment, try `npx impeccable live`, inject/read detector console findings, then stop the live process. If this cannot be done, report `browser/screenshot QA: skipped:<reason>` or `impeccable live: skipped:<reason>`.
-
-4. If tools are unavailable, do not silently continue. Record:
-
-   ```text
-   tool=unavailable:<reason>
-   ```
-
-   Continue using vendored references and final-report the distinction between checks that ran and fallback review.
-
-## Hard Preflight Gate
-
-Before any UI/HTML/CSS/design-file mutation, output one line:
-
-```text
-DHB_PREFLIGHT: context=pass|partial|missing product=pass|missing design=pass|missing|stale register=brand|product|document|resume command=teach|document|shape|craft|critique|audit|polish|harden|typeset|layout|colorize|adapt references=pass|partial tools=impeccable:pass|skip:<reason>,designmd:pass|skip:<reason> mutation=open|blocked
-```
-
-Rules:
-
-- `mutation=open` only after context loading and required references are known.
-- If context cannot be loaded, use `context=partial` and list the manual files inspected.
-- If `PRODUCT.md` exists, read register, users, purpose, anti-references, and principles.
-- If `DESIGN.md` exists, it is the first-priority visual system. Tokens override descriptive prose.
-- If `DESIGN.json` exists, read it as a sidecar for details that do not fit Google DESIGN.md tokens.
-- If required references are missing, continue with `references=partial` and final-report `missing reference: <path>`.
-- Never overwrite existing `PRODUCT.md`, `DESIGN.md`, or `DESIGN.json` without explicit user intent.
+| Trigger | Load | Skip |
+|---|---|---|
+| simple standalone HTML | kernel only | all references |
+| small style/content change | kernel only, plus existing `DESIGN.md` if obvious | runtime, all references |
+| redesign / polish existing page | `references/design-rubric.md` | resume, design-md-template |
+| resume / CV / print HTML | `references/resume-html-design.md` | DESIGN.md unless reused |
+| create/update `DESIGN.md` | `references/design-md-contract.md` + `references/design-md-template.md` | resume |
+| PDF requested | `references/resume-html-design.md` if relevant + `html-to-pdf-qa` | runtime unless needed |
+| strict audit / production-ready / full QA | `references/design-rubric.md` + `references/impeccable-internalized.md` | template unless writing DESIGN.md |
+| harden / edge cases / anti-AI look | `references/impeccable-internalized.md` | resume unless print/PDF |
+| runtime scan requested | `references/impeccable-runtime.md` + run audit script | template unless writing DESIGN.md |
 
 ## Command Router
 
-Infer the command from user intent even when no command is named.
+Infer intent even when the user does not name a command.
 
-| Command | Use When | Required References | Runtime Audit | Browser/Visual QA | Mutation |
-|---|---|---|---|---|---|
-| `teach` | Establish product/design context | `design-md-contract.md`, `design-md-template.md` | optional DESIGN.md lint after creation | optional | only after user confirms strategic facts |
-| `document` | Generate/update `DESIGN.md` from existing UI/tokens/components | `design-md-contract.md`, `design-md-template.md` | required after write | optional | allowed; do not overwrite silently |
-| `shape` | Produce a design brief, no code | `impeccable-runtime.md`, register reference | no | no | blocked |
-| `craft` | Create a new page or HTML artifact | `impeccable-runtime.md`, `design-rubric.md`, register reference | run when target exists | required when feasible | allowed |
-| `critique` | Review before changing | `impeccable-runtime.md`, `design-rubric.md` | required when target scan possible | required when feasible | blocked unless user asks fixes |
-| `audit` | Technical quality, a11y, responsive, performance, DESIGN.md lint | `impeccable-runtime.md`, `design-rubric.md` | required | required when feasible | blocked unless user asks fixes |
-| `polish` | Fix drift and final craft | `impeccable-runtime.md`, `design-rubric.md` | required when target scan possible | required when feasible | allowed |
-| `harden` | Stress real content and edge states | `impeccable-runtime.md`, `design-rubric.md` | optional | required when feasible | allowed |
-| `typeset` | Typography, CJK, resume/report/print readability | `impeccable-runtime.md`, `resume-html-design.md` for print/resume | optional | required for visual artifacts | allowed |
-| `layout` | Hierarchy, grid, density, spacing rhythm | `impeccable-runtime.md`, `design-rubric.md` | optional | required when feasible | allowed |
-| `colorize` | Palette roles, contrast, color strategy | `impeccable-runtime.md`, `design-rubric.md`, `design-md-contract.md` if tokens change | run DESIGN.md lint after token changes | required when feasible | allowed |
-| `adapt` | Multi-device adaptation, container queries, mobile collapse | `impeccable-runtime.md`, `design-rubric.md` | optional | required across target viewports | allowed |
+| Intent | Meaning |
+|---|---|
+| `teach` / `document` | establish context or create/update `DESIGN.md` |
+| `shape` / `craft` | brief first, or create a new page/artifact |
+| `critique` / `audit` | review or technical QA before mutation |
+| `polish` / `harden` | align with system, fix drift, test edge cases |
+| `typeset` / `layout` / `colorize` | typography, grid/density, palette/contrast |
+| `adapt` | multi-device layout, container queries, mobile collapse |
 
-Register loading:
+## Escalation Rules
 
-- `brand`: marketing, landing, portfolio, campaign, long-form, where design is the product.
-- `product`: app UI, dashboard, admin, tool, form, settings, where design serves repeated work.
-- `document`/`resume`: print, report, resume, PDF-bound HTML; dense readability wins.
+Load more references or run deeper tools only when:
 
-## Reference Loading Rules
+- current file context is insufficient to complete the task
+- the user asks for production-ready, audit, QA, strict review, or comprehensive checking
+- the output will become a reusable design system
+- the task involves PDF, print, resume, or CV output
+- responsive behavior, long text, pagination, accessibility, or edge states are already a visible risk
 
-Hard rules:
+Otherwise, do not load every reference just in case.
 
-- All design tasks: load `references/impeccable-runtime.md`; if missing, load `references/impeccable-internalized.md`.
-- Any task that uses or creates `DESIGN.md`: load `references/design-md-contract.md`.
-- Creating or updating `DESIGN.md`: load `references/design-md-template.md`.
-- `critique`, `polish`, and `audit`: load `references/design-rubric.md`.
-- `resume`, `print`, or `PDF`: load `references/resume-html-design.md` and hand off to `html-to-pdf-qa` for export.
-- Project `DESIGN.md` outranks vendored references for concrete tokens/components.
-- Project `PRODUCT.md` outranks assumptions for register, users, purpose, anti-references, and strategic design principles.
+## Reading Budget
 
-## DESIGN.md Rules
+- Start with kernel only.
+- Load at most one reference file by default.
+- Load two or more references only when the Loading Router explicitly matches.
+- If a project has an obvious `DESIGN.md`, read it before changing reusable styles.
+- If a project has an obvious `PRODUCT.md`, use it for audience, purpose, register, and anti-references.
+- If a reference is loaded, keep the reason internal and final-report it briefly.
+- Never load every reference preventively.
 
-When creating or updating `DESIGN.md`:
+## Runtime Tools
 
-- Follow Google DESIGN.md structure: YAML frontmatter plus Markdown body.
-- Frontmatter is machine-readable tokens; Markdown prose explains why/how.
-- Token refs use `{colors.primary}` style paths.
-- Component token properties are limited to: `backgroundColor`, `textColor`, `typography`, `rounded`, `padding`, `size`, `height`, `width`.
-- Fold awesome-design-md-style guidance into Google-compatible sections or put extra detail in `DESIGN.json` / `docs/DESIGN-EXTENDED.md`.
-- After changes, try `npx @google/design.md lint DESIGN.md --format json` through `run-design-audit.mjs`.
+Use only in Layer 2:
 
-## PDF Integration
-
-For resume, report, or print HTML:
-
-1. Finish the HTML/CSS design pass.
-2. Invoke the `html-to-pdf-qa` skill or equivalent workflow.
-3. Export PDF, render every PDF page to images, and inspect every page.
-4. Fix unreadable font size, clipped text, awkward page breaks, excessive blank space, weak density, and Chinese-English wrapping before final delivery.
-
-Do not assume the target is one page or two pages. Page count follows content, purpose, readability, and visual balance.
+- Context loader: `node skills/designed-html-builder/scripts/load-design-context.mjs`
+- Audit bridge: `node skills/designed-html-builder/scripts/run-design-audit.mjs <target>`
+- Impeccable CLI is only "ran" if `npx impeccable...` actually ran.
+- Google DESIGN.md lint is only "ran" if `npx @google/design.md lint...` actually ran.
+- If a tool cannot run, report `skipped:<reason>`; do not imply runtime validation happened.
 
 ## Output Standard
 
-Final reports must stay short and include:
+Keep final reports short:
 
-```text
-Changed:
-- ...
+- Changed: files and concrete behavior/design updates.
+- Context used: `PRODUCT.md` yes/no, `DESIGN.md` yes/no, references loaded.
+- Runtime checks: Impeccable CLI, DESIGN.md lint, browser/screenshot QA, PDF QA, each `ran` or `skipped:<reason>`.
+- Design decisions: register, typography, color strategy, layout/density, component states when relevant.
+- Remaining tradeoffs: only material risks.
 
-Context used:
-- PRODUCT.md: yes/no
-- DESIGN.md: yes/no
-- References: ...
-
-Runtime checks:
-- impeccable CLI: ran/skipped + reason
-- DESIGN.md lint: ran/skipped + reason
-- browser/screenshot QA: ran/skipped + reason
-- PDF QA: ran/skipped + reason
-
-Design decisions:
-- register
-- typography
-- color strategy
-- layout/density
-- component states
-
-Remaining tradeoffs:
-- ...
-```
-
-Language rules:
-
-- Say `ran Impeccable CLI` only if `npx impeccable...` actually ran.
-- Say `used Impeccable runtime fallback reference` when using `references/impeccable-runtime.md`.
-- Say `applied Impeccable-style internal rules` only for local heuristic application.
-- Do not say "used Impeccable" ambiguously.
+Use precise language: `ran Impeccable CLI`, `used Impeccable runtime fallback reference`, or `applied local design rules`.

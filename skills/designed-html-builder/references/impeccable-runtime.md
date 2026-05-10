@@ -1,5 +1,21 @@
 # Impeccable Runtime And Fallback
 
+## Use when
+
+- The user asks for runtime scan, strict audit, production-ready QA, or explicit Impeccable validation.
+- You need to distinguish actual CLI results from local fallback review.
+
+## Do not use when
+
+- The task is a normal HTML generation or light polish request.
+- There is no markup target and no user request for deep QA.
+
+## Key outputs
+
+- Runtime command rules.
+- Fallback reason reporting.
+- Two-pass critique, polish drift classification, and harden checks.
+
 This skill uses Impeccable in three distinct ways. Keep the labels precise.
 
 ## Runtime Labels

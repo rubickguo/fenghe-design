@@ -1,5 +1,22 @@
 # DESIGN.md Contract
 
+## Use when
+
+- The task creates, updates, validates, or explains `DESIGN.md`.
+- The output will become a reusable design-system contract.
+- The user asks for Google DESIGN.md compatibility or lint behavior.
+
+## Do not use when
+
+- The task is simple standalone HTML or a one-off style tweak.
+- The task is resume/PDF-only and does not reuse a design system.
+
+## Key outputs
+
+- Google-compatible `DESIGN.md` contract rules.
+- Token/prose precedence.
+- Lint and repair priorities.
+
 `DESIGN.md` is the project-root design-system contract. It is the first-priority visual source for agents when present.
 
 ## Structure

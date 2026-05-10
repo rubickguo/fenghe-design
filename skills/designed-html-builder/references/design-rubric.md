@@ -1,5 +1,21 @@
 # Design Rubric
 
+## Use when
+
+- The task is critique, audit, redesign, visual QA, or substantial polish.
+- The page has hierarchy, layout, color, component, responsive, or accessibility risks.
+
+## Do not use when
+
+- The task is a small text/style edit with obvious local context.
+- The task is pure `DESIGN.md` authoring or pure PDF export.
+
+## Key outputs
+
+- Review dimensions for visual quality.
+- Polish drift classification.
+- Harden checks for real content and responsive behavior.
+
 Use this for `critique`, `audit`, `polish`, and broad page review. Pair it with `impeccable-runtime.md`.
 
 ## Two-Lane Critique

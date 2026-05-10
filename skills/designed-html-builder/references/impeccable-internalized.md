@@ -1,5 +1,21 @@
 # Impeccable Internalized Workflow
 
+## Use when
+
+- The task asks for hardening, anti-AI look, edge-case review, or strict design judgment.
+- Runtime tools are unnecessary or unavailable but Impeccable-style rules are useful.
+
+## Do not use when
+
+- The task is a simple standalone HTML build or minor local CSS change.
+- The task specifically requires actual Impeccable CLI execution; use `impeccable-runtime.md` and the audit script instead.
+
+## Key outputs
+
+- Compact preflight prompts.
+- Mode routing for design work.
+- Anti-pattern and hostile-content checks.
+
 This reference turns Impeccable-style design behavior into executable workflow rules for this skill. Prefer `impeccable-runtime.md` when available; use this as the compact fallback.
 
 ## Preflight Gates

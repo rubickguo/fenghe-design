@@ -1,5 +1,21 @@
 # DESIGN.md Template
 
+## Use when
+
+- The task creates or replaces a project-level `DESIGN.md`.
+- The task needs a Google-compatible frontmatter + Markdown template.
+
+## Do not use when
+
+- The task only reads or critiques an existing `DESIGN.md`.
+- The task is normal HTML/page work without design-system output.
+
+## Key outputs
+
+- YAML frontmatter with supported token groups.
+- Google-compatible section order.
+- Places to fold awesome-design-md-style guidance without breaking lint.
+
 Use this template when creating or replacing a project-level `DESIGN.md`. Replace placeholders with actual project values. Do not leave placeholder tokens in committed output.
 
 ```markdown
