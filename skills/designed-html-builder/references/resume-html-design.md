@@ -44,6 +44,15 @@ When exporting to PDF, use the `html-to-pdf-qa` workflow:
 - Do not force a one-page or two-page resume if it makes the document worse.
 - If the user asks for a specific page count, treat it as a constraint to balance against readability.
 
+Before export, run the Designed HTML Builder preflight:
+
+- Load project/person/job context if it exists.
+- Load `DESIGN.md` when present, but prioritize resume readability over decorative web styling.
+- Run `run-design-audit.mjs` when the HTML file exists and tool access is available.
+- If tools are unavailable, report runtime checks as skipped and do manual visual review.
+
+After export, inspect every rendered page. Do not call a PDF ready just because the file exists.
+
 ## Role-Specific Emphasis
 
 For product manager resumes:
@@ -55,3 +64,13 @@ For developer resumes:
 
 - Prioritize technical scope, architecture decisions, delivery ownership, debugging complexity, code quality, performance, reliability, and measurable engineering outcomes.
 - Translate metrics into engineering impact where possible.
+
+## Resume Hardening
+
+Test:
+
+- Chinese-English mixed company names, product names, dates, and URLs.
+- Long project bullets and dense skill lists.
+- Page breaks between job title, date, and bullets.
+- Final page density and blank space.
+- Font size at actual PDF zoom, not only browser preview.

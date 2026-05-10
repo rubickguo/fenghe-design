@@ -1,24 +1,88 @@
 # Design Rubric
 
-Use this checklist when designing or reviewing websites, web apps, HTML pages, dashboards, and portfolio pages.
+Use this for `critique`, `audit`, `polish`, and broad page review. Pair it with `impeccable-runtime.md`.
+
+## Two-Lane Critique
+
+### 1. LLM Design Director Review
+
+Review the interface across:
+
+- AI slop detection: category-reflex palette, decorative blobs, gradient text, glassy cards, side-stripe cards, identical card grids, template hero metrics, overused fonts.
+- Hierarchy: primary action, scan order, section grouping, content density, first-screen clarity.
+- Information architecture: labels, navigation, grouping, cognitive load, progressive disclosure.
+- Composition: alignment, grid, rhythm, whitespace, repeated containers, balance.
+- Typography: role scale, line length, CJK/mixed-language wrapping, numeric alignment, font choice, line height.
+- Color: strategy, semantic roles, contrast, accent dosage, state colors.
+- Emotional fit: does the page match register, audience, purpose, and anti-references from `PRODUCT.md`?
+- Edge states: empty, loading, error, disabled, selected, overflow, long content, large datasets.
+- Microcopy: button labels, empty states, errors, tooltips, accessibility labels.
+
+### 2. Deterministic Scan
+
+When possible, run:
+
+```bash
+node skills/designed-html-builder/scripts/run-design-audit.mjs <target>
+```
+
+Use its JSON to report:
+
+- Impeccable CLI findings, exit code, and skipped reason.
+- Google DESIGN.md lint findings, summary, and skipped reason.
+- Whether fallback review was required.
+
+If runtime tools are unavailable, state the skipped reason and continue with this rubric.
 
 ## Intent
 
 - The first screen makes the product, person, object, or task clear.
 - The page supports the user's actual workflow instead of presenting a generic marketing layout.
-- The content hierarchy is obvious when scanning for 5 seconds.
-- The design has a coherent point of view, not a pile of fashionable effects.
+- The content hierarchy is obvious within 5 seconds.
 - The visual register matches the surface: brand, product/app, dashboard, document, resume, portfolio, landing page, or print.
-- The design avoids category reflex: it does not look like the first obvious template for its category.
+- The design avoids first-order and second-order category reflex.
+
+## Polish Workflow
+
+Before changing visuals, discover:
+
+- `PRODUCT.md` and `DESIGN.md`
+- `DESIGN.json` or extended sidecars
+- CSS variables and tokens
+- Tailwind config
+- component files and comparable components
+- existing states, spacing, radii, typography, and color vocabulary
+
+Classify every issue:
+
+- `missing token`: create or document a reusable token/role.
+- `one-off implementation`: replace local styling with the existing system.
+- `conceptual mismatch`: change the pattern because it does not fit the user task or register.
+
+## Harden Workflow
+
+Stress the page with hostile content:
+
+- long Chinese paragraphs
+- long English words and URLs
+- emoji
+- CJK, Japanese, and Korean text
+- RTL where relevant
+- 30-40% longer translated strings
+- empty, loading, error, disabled, selected states
+- large datasets
+- 320px mobile width and narrow containers
+- zoom/text scaling
+- print page breaks when relevant
 
 ## Typography
 
-- Type scale has named roles: page title, section title, body, metadata, labels, controls.
-- Body text is readable at desktop and mobile sizes.
-- Line height supports the language and density; Chinese-English mixed text is not cramped.
-- Letter spacing is not negative.
+- Type scale has named roles.
+- Body text is readable on desktop, mobile, and print when relevant.
+- Line height supports language and density.
+- Letter spacing is not negative for body text; display text may use it intentionally.
 - Long words, URLs, dates, and numeric strings do not overflow containers.
-- Font choice is intentional. Do not default to Arial, Inter, or system fonts unless it matches the product context.
+- Font choice is intentional. Product UI may use system fonts; brand pages need stronger voice.
 
 ## Layout
 
@@ -31,36 +95,35 @@ Use this checklist when designing or reviewing websites, web apps, HTML pages, d
 
 ## Color And Contrast
 
-- Colors have roles rather than one-off decoration.
 - A color strategy is chosen before individual colors: restrained, committed accent, full palette, or immersive/drenched.
+- Colors have semantic roles rather than one-off decoration.
 - Text contrast is strong enough on every background.
 - Muted text remains readable.
-- Avoid gray text on saturated or image backgrounds.
-- Avoid one-note palettes dominated by a single hue family unless the brand requires it.
-- Avoid pure black/gray-only pages unless a specific editorial or product reason exists.
+- Gray text is not placed on saturated or image backgrounds.
+- One-note palettes are avoided unless the brand explicitly requires them.
 
 ## Components
 
 - Buttons, tabs, toggles, sliders, menus, and inputs match the expected control type.
-- Icons are used for familiar tool actions when available.
-- States exist for hover, focus, selected, disabled, loading, and empty data where relevant.
-- Empty, error, disabled, loading, and overflow states are designed, not left to browser defaults.
-- UI text fits inside controls at all target widths.
-- Error and empty states are useful, not generic.
+- States exist for hover, focus, selected, disabled, loading, empty, and error.
+- Focus states are visible and keyboard-accessible.
+- UI text fits inside controls at target widths.
+- Empty and error states are useful and specific.
 
 ## Responsive Behavior
 
 - Mobile layout is designed, not merely compressed.
 - Important controls remain reachable.
-- Text does not overlap or occlude content.
 - Tables, grids, and sidebars have explicit responsive behavior.
-- Hero or first-screen content leaves a hint of the next section when the page is a landing page.
+- Text does not overlap or occlude content.
+- Touch targets meet at least 44px where practical.
 
 ## Interaction And Motion
 
 - Motion clarifies state, continuity, or feedback.
 - Avoid decorative bounce, elastic easing, and slow transitions that reduce usability.
 - Interactive elements have visible focus states.
+- Destructive actions prefer undo when feasible; irreversible actions require clear confirmation.
 
 ## Anti-Patterns
 

@@ -15,37 +15,45 @@
 
 ## 核心思路
 
-### 1. 把设计请求拆成可执行模式
+### 1. 先跑上下文和 runtime bridge
 
-这个 Skill 不是只说“参考 Impeccable”，而是把它的设计工作方式内化成模式：
+这个 Skill 不再只说“参考 Impeccable / DESIGN.md”，而是要求先执行：
+
+- `scripts/load-design-context.mjs`：读取 `PRODUCT.md`、`DESIGN.md`、`DESIGN.json`、CSS 变量、Tailwind、组件和 HTML 入口。
+- `scripts/run-design-audit.mjs`：在可用时运行 `npx impeccable --json <target>` 和 `npx @google/design.md lint DESIGN.md --format json`。
+- 如果工具不可用，必须明确报告 skipped reason，并 fallback 到本地 references。
+
+### 2. 把设计请求拆成可执行模式
+
+它把 Impeccable 的设计工作方式内化成模式：
 
 - `shape`：方向不清时先定设计判断
 - `craft`：从零做页面或 HTML
 - `critique`：先指出问题再改
+- `audit`：运行技术质量、a11y、响应式和 DESIGN.md lint
 - `polish`：在保留意图的前提下打磨现有页面
 - `harden`：用真实和极端内容检查稳定性
 - `typeset`：处理中文、中英混排、简历和打印阅读
 - `layout`：处理层级、栅格、密度和节奏
 - `colorize`：处理色彩角色和对比
+- `adapt`：处理多端适配、移动端折叠和 container queries
 
-### 2. 先判断场景，再做设计
+### 3. 先判断场景，再做设计
 
 网站、App 工具、简历、Dashboard、作品集、报告、打印 PDF 的设计密度不同。这个 Skill 要求先判断页面的真实用途，而不是直接生成一个通用模板。
 
-### 3. 用 DESIGN.md 沉淀可复用设计系统
+### 4. 用 DESIGN.md 沉淀可复用设计系统
 
-生成 HTML 前，需要先确定：
+生成 HTML 前，需要先读取或建立 Google DESIGN.md 兼容的设计系统：
 
-- 字体层级
-- 色彩角色
-- 栅格与间距
-- 组件状态
-- 响应式行为
-- 打印或 PDF 约束
+- YAML frontmatter 承载 tokens
+- Markdown body 承载应用说明
+- component tokens 只使用 Google spec 支持的属性
+- awesome-design-md 的扩展内容折叠进兼容 section 或放入 sidecar
 
 如果项目会被持续维护，应创建或读取 `DESIGN.md`，把主题、颜色角色、字体规则、组件规范、响应式行为和 AI 后续编辑规则写成项目合约，而不是只在聊天里描述。
 
-### 4. 反通用 AI 模板感
+### 5. 反通用 AI 模板感
 
 Skill 明确避免：
 
@@ -60,7 +68,7 @@ Skill 明确避免：
 - 灰字压在彩色背景上
 - 只追求好看但不利于阅读和使用
 
-### 5. 重视中文与中英混排
+### 6. 重视中文与中英混排
 
 这个 Skill 特别关注：
 
@@ -71,7 +79,7 @@ Skill 明确避免：
 - 移动端中文长句阅读
 - PDF 中字号、行高、留白和断页
 
-### 6. HTML 转 PDF 必须视觉校验
+### 7. HTML 转 PDF 必须视觉校验
 
 如果任务涉及 HTML 转 PDF，应配合 `html-to-pdf-qa` 工作流：
 
@@ -86,12 +94,17 @@ Skill 明确避免：
 ```text
 skills/designed-html-builder/
 ├── SKILL.md
+├── NOTICE.md
 ├── agents/openai.yaml
+├── scripts/
+│   ├── load-design-context.mjs
+│   └── run-design-audit.mjs
 └── references/
     ├── design-md-contract.md
     ├── design-md-template.md
     ├── design-rubric.md
     ├── impeccable-internalized.md
+    ├── impeccable-runtime.md
     └── resume-html-design.md
 ```
 

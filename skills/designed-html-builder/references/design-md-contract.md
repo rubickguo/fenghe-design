@@ -1,62 +1,98 @@
 # DESIGN.md Contract
 
-Use `DESIGN.md` as a durable design-system contract for future agents. It should be specific enough to guide implementation and short enough to be followed.
+`DESIGN.md` is the project-root design-system contract. It is the first-priority visual source for agents when present.
 
-## When To Create Or Update
+## Structure
 
-Create or update `DESIGN.md` when:
+A valid `DESIGN.md` has:
 
-- the user asks for a reusable style, system, website direction, or skill behavior
-- a repo has multiple pages or will receive future design changes
-- the current UI is inconsistent and needs a shared visual language
-- HTML will be reused for PDF or resume variants
+- YAML frontmatter: machine-readable tokens.
+- Markdown body: human-readable why/how.
 
-Do not create it for a tiny one-off artifact unless the user asks.
+Tokens are normative. Descriptive prose explains application but must not contradict tokens.
 
-## Required Sections
+## Frontmatter Token Rules
 
-A project-level `DESIGN.md` should define:
+Use the Google DESIGN.md token schema:
 
-- Visual theme and atmosphere: concrete feel plus what to avoid
-- Audience and use context: who uses it, where, and how often
-- Color roles: semantic tokens before decorative colors
-- Typography rules: font stack, role scale, line height, and wrapping
-- Spacing and layout: page width, grid, section rhythm, density, responsive behavior
-- Component styling: buttons, inputs, cards, tabs, tables, lists, dialogs, states
-- Depth and elevation: when to use border, shadow, tint, or divider
-- Do and don't: practical constraints future agents can enforce
-- Responsive behavior: mobile/tablet/desktop changes
-- Agent prompt guide: how future AI edits should preserve the system
+- `version`: optional, current value usually `alpha`
+- `name`: project or design-system name
+- `description`: one-line visual system summary
+- `colors`: map of token name to sRGB hex value
+- `typography`: map of role name to typography object
+- `rounded`: map of scale level to dimension
+- `spacing`: map of scale level to dimension or number
+- `components`: map of component variant to component token properties
 
-## Token Standard
+Token references use `{colors.primary}` style paths.
 
-Use semantic roles like:
+Component token properties are limited to:
 
-- `background`
-- `surface`
-- `surface-muted`
-- `text`
-- `text-muted`
-- `border`
-- `accent`
-- `focus`
-- `success`
-- `warning`
-- `danger`
+- `backgroundColor`
+- `textColor`
+- `typography`
+- `rounded`
+- `padding`
+- `size`
+- `height`
+- `width`
 
-Define where each role is allowed. Avoid unlabelled one-off colors.
+If a component needs unsupported details such as border color, shadow, focus ring, motion, backdrop filter, or responsive behavior, describe them in the Markdown body or a sidecar file (`DESIGN.json` / `docs/DESIGN-EXTENDED.md`).
 
-## Component Standard
+## Markdown Body Rules
 
-For each recurring component, describe:
+Use Google-compatible section order:
 
-- purpose
-- visual anatomy
-- spacing and sizing
-- allowed variants
-- hover/focus/selected/disabled/loading/empty/error states
-- responsive behavior
+1. `## Overview`
+2. `## Colors`
+3. `## Typography`
+4. `## Layout`
+5. `## Elevation & Depth`
+6. `## Shapes`
+7. `## Components`
+8. `## Do's and Don'ts`
 
-## Agent Rule
+Fold awesome-design-md-style guidance into these sections:
 
-When editing a project with `DESIGN.md`, future work should first read it, then either follow it or explicitly state why the design contract needs to change.
+- visual atmosphere -> `Overview`
+- color roles -> `Colors`
+- typography hierarchy -> `Typography`
+- spacing, grid, density, responsive behavior -> `Layout`
+- shadows, borders, layers -> `Elevation & Depth`
+- radii and form language -> `Shapes`
+- component anatomy and states -> `Components`
+- agent prompt guide and guardrails -> `Do's and Don'ts`
+
+Do not create messy extra top-level sections for `Responsive Behavior` or `Agent Prompt Guide` unless preserving an existing file. Prefer folding or sidecar storage.
+
+## Lint Requirement
+
+After creating or updating `DESIGN.md`, run through the audit script:
+
+```bash
+node skills/designed-html-builder/scripts/run-design-audit.mjs .
+```
+
+The script attempts:
+
+```bash
+npx @google/design.md lint DESIGN.md --format json
+```
+
+If lint fails, fix in this order:
+
+1. broken token refs
+2. missing or malformed typography tokens
+3. invalid color values or bad contrast
+4. duplicate or out-of-order sections
+5. orphaned tokens not used by prose or components
+
+If the CLI is unavailable, report `DESIGN.md lint: skipped:<reason>` and manually review against this contract.
+
+## Google Spec vs Awesome Examples
+
+- Google DESIGN.md is the normative spec.
+- awesome-design-md is a source of structure, token precision, and agent-readable description style.
+- Do not imitate a brand identity blindly.
+- Learn how examples name tokens, describe component states, and connect visual atmosphere to implementation.
+- Keep output compatible with Google lint unless the user explicitly asks for a non-compatible sidecar.

@@ -1,126 +1,167 @@
 ---
 name: designed-html-builder
-description: "Design or improve websites, HTML pages, resume HTML, portfolio pages, landing pages, product pages, dashboards, and print-ready web documents with stronger typography, layout, color, component styling, responsive behavior, and visual QA. Use when the user asks to make a page more designed, generate polished HTML, redesign a resume, create or apply DESIGN.md guidance, or prepare HTML that may later be exported to PDF."
+description: "Design or improve websites, HTML pages, resume HTML, portfolio pages, landing pages, product pages, dashboards, reports, and print-ready web documents with executable design-system context loading, Impeccable runtime/fallback checks, Google DESIGN.md linting, typography/layout/color guidance, browser visual QA, and HTML-to-PDF QA handoff."
 ---
 
 # Designed HTML Builder
 
 ## Purpose
 
-Create web and resume HTML that looks intentionally designed, not like a generic generated page. This skill combines:
+Create or improve HTML/CSS and design-system artifacts with real project context, not generic design advice. This skill must:
 
-- design-language discipline from Impeccable-style audit/craft/polish workflows
-- DESIGN.md-style project guidance for repeatable visual systems
-- typography-first rules for mixed Chinese-English content, resumes, and print
+- load `PRODUCT.md`, `DESIGN.md`, `DESIGN.json`, existing styles, components, and local references before UI mutation
+- run runtime tools when available: `impeccable_cli` and `google_design_md_cli`
+- explicitly fallback to vendored references when tools are unavailable
+- preserve the original strengths: Chinese-English typography, resume HTML, print CSS, and mandatory PDF visual QA
 
-When PDF output is requested, this skill must hand off to the `html-to-pdf-qa` workflow and follow its rendered-page QA rules.
+## Runtime Tool Bridge
 
-## Internalized Design Engines
+Use runtime tools when Bash, Node/npm, and network access allow it. Never claim a runtime ran unless the command actually ran.
 
-These are operational rules, not citations.
+Runtime names:
 
-### Impeccable-Style Workflow
+- `runtime: impeccable_cli`: `npx impeccable --json <markup-target>` or `npx impeccable detect --json <markup-target>`
+- `runtime: google_design_md_cli`: `npx @google/design.md lint DESIGN.md --format json`
+- `fallback: vendored_reference`: this skill's local `references/*.md`
 
-- Treat design requests as modes: `shape`, `craft`, `critique`, `polish`, `harden`, `typeset`, `layout`, and `colorize`.
-- Run preflight before implementation: gather context, classify the surface, identify constraints, choose a visual register, then edit.
-- Use critique before polish. Name the actual problem first: unclear hierarchy, generic visual language, weak density, inconsistent system, broken responsive behavior, poor print output, or fragile edge states.
-- During polish, distinguish the cause of drift: missing design token, one-off implementation, or conceptual mismatch.
-- During harden, test hostile content: long Chinese sentences, long English words, URLs, dates, empty states, dense data, narrow mobile widths, and print page breaks.
-- Avoid default AI aesthetics: category-reflex colors, decorative blobs, gradient text as a main idea, side-stripe accents as a default card treatment, identical card grids, hero metric templates, and modal-first thinking.
+Required behavior:
 
-### DESIGN.md Contract
+1. Start design work with:
 
-- If a project has `DESIGN.md`, read it before designing and preserve its token/component language.
-- If a project lacks `DESIGN.md` but the design will be reused, create or update one with concrete rules, not vague adjectives.
-- A useful `DESIGN.md` defines visual theme, color roles, typography roles, spacing, layout, component styling, depth/elevation, responsive behavior, and agent guidance.
-- Use semantic roles first (`background`, `surface`, `text`, `muted`, `border`, `accent`, `focus`, `success`, `warning`, `danger`) before choosing arbitrary hex values.
-- Extract local patterns from existing UI before adding new ones. If the existing system is weak, state the proposed system explicitly.
+   ```bash
+   node skills/designed-html-builder/scripts/load-design-context.mjs
+   ```
 
-### Typography And Font Layer
+   Consume the full JSON. Do not pipe it through `head`, `tail`, `grep`, or truncating tools. If the script cannot run, manually read the same context and report `context=partial`.
 
-- Typography is a structural layer, not decoration. Decide hierarchy, density, line length, and wrapping before visual effects.
-- For Chinese and mixed Chinese-English pages, prioritize readable line height, controlled line length, stable numerals, and overflow behavior.
-- For print or resume HTML, prefer durable readability over expressive web styling.
+2. For markup, directories, or URLs that can be scanned, run:
 
-## Required Workflow
+   ```bash
+   node skills/designed-html-builder/scripts/run-design-audit.mjs <target>
+   ```
 
-1. Inspect the existing project, page, HTML/CSS, screenshots, or content before designing.
-2. Identify the surface register: brand page, product/app tool, dashboard, personal site, portfolio, resume, report, landing page, or print document.
-3. Route the task into the right mode:
-   - `shape`: define direction before implementation.
-   - `craft`: create a new designed page or HTML artifact.
-   - `critique`: identify problems before changing visuals.
-   - `polish`: improve an existing page while preserving intent.
-   - `harden`: make the page robust against real content and device constraints.
-   - `typeset`: improve typography, mixed-language layout, and print readability.
-   - `layout`: fix hierarchy, grid, density, spacing, and page rhythm.
-   - `colorize`: define or repair color roles and contrast.
-4. Define a compact design brief:
-   - audience and reading context
-   - content hierarchy and density
-   - visual tone
-   - primary constraints such as mobile, print, ATS readability, or page count
-5. Choose a visual system before implementation:
-   - typography roles and line heights
-   - color roles and contrast
-   - spacing grid and layout rhythm
-   - component states and interaction behavior
-   - responsive behavior
-6. Implement in the existing stack or produce standalone HTML/CSS when requested.
-7. Run visual QA in browser or via screenshots when feasible.
-8. If exporting HTML to PDF, use the `html-to-pdf-qa` skill and inspect every rendered PDF page.
+   The script tries Impeccable and DESIGN.md lint, captures exit codes, stderr, stdout, and normalized findings.
 
-## Design Rules
+3. When browser automation and a browsable target are available, prefer visual QA via screenshots. If an Impeccable live overlay is available in the environment, try `npx impeccable live`, inject/read detector console findings, then stop the live process. If this cannot be done, report `browser/screenshot QA: skipped:<reason>` or `impeccable live: skipped:<reason>`.
 
-- Make hierarchy visible through type, spacing, alignment, and content grouping before adding decoration.
-- Avoid the generic AI SaaS look: default Inter/system typography, one-note purple or blue gradients, decorative blobs, nested cards, and gray text on colored backgrounds.
-- Before choosing colors, choose a color strategy: restrained, committed accent, full palette, or immersive/drenched. Do not let the product category choose colors automatically.
-- Do not wrap every section in cards. Use cards for repeated items, tools, and bounded modules only.
-- Use color as a system with roles: background, surface, text, muted text, border, accent, danger/success, and focus.
-- Typography is a product decision. Define role-based sizes, weights, line heights, and wrapping behavior.
-- Keep long-form text near 65-75 characters per line where practical; for dense tools and resumes, preserve scanability with tighter but readable measures.
-- Mixed Chinese-English text needs readable line height, stable numerals, and tested wrapping for long English words, URLs, and dates.
-- Layout needs rhythm, not repeated identical containers. Vary section treatment according to content meaning.
-- Do not use thick colored side borders, gradient text, glassy cards, or decorative effects as the default way to create hierarchy.
-- Motion is optional. If used, keep it purposeful and restrained; avoid bouncy decorative transitions.
-- Resume design should be dense, readable, and evidence-first; it is not a landing page.
-- Run the category-reflex check: if the design could be described as "generic AI SaaS", "generic portfolio", "generic dashboard", or "generic resume", revise the visual language.
+4. If tools are unavailable, do not silently continue. Record:
 
-## Reference Files
+   ```text
+   tool=unavailable:<reason>
+   ```
 
-Load only the references needed for the task:
+   Continue using vendored references and final-report the distinction between checks that ran and fallback review.
 
-- `references/impeccable-internalized.md` for mode routing, critique/polish/harden behavior, and anti-pattern rules.
-- `references/design-md-contract.md` for creating or applying durable `DESIGN.md` guidance.
-- `references/design-rubric.md` for website/app/page visual QA and anti-pattern checks.
-- `references/design-md-template.md` when creating or updating a project-level `DESIGN.md`.
-- `references/resume-html-design.md` for resume HTML, print layout, and PDF readiness.
+## Hard Preflight Gate
+
+Before any UI/HTML/CSS/design-file mutation, output one line:
+
+```text
+DHB_PREFLIGHT: context=pass|partial|missing product=pass|missing design=pass|missing|stale register=brand|product|document|resume command=teach|document|shape|craft|critique|audit|polish|harden|typeset|layout|colorize|adapt references=pass|partial tools=impeccable:pass|skip:<reason>,designmd:pass|skip:<reason> mutation=open|blocked
+```
+
+Rules:
+
+- `mutation=open` only after context loading and required references are known.
+- If context cannot be loaded, use `context=partial` and list the manual files inspected.
+- If `PRODUCT.md` exists, read register, users, purpose, anti-references, and principles.
+- If `DESIGN.md` exists, it is the first-priority visual system. Tokens override descriptive prose.
+- If `DESIGN.json` exists, read it as a sidecar for details that do not fit Google DESIGN.md tokens.
+- If required references are missing, continue with `references=partial` and final-report `missing reference: <path>`.
+- Never overwrite existing `PRODUCT.md`, `DESIGN.md`, or `DESIGN.json` without explicit user intent.
+
+## Command Router
+
+Infer the command from user intent even when no command is named.
+
+| Command | Use When | Required References | Runtime Audit | Browser/Visual QA | Mutation |
+|---|---|---|---|---|---|
+| `teach` | Establish product/design context | `design-md-contract.md`, `design-md-template.md` | optional DESIGN.md lint after creation | optional | only after user confirms strategic facts |
+| `document` | Generate/update `DESIGN.md` from existing UI/tokens/components | `design-md-contract.md`, `design-md-template.md` | required after write | optional | allowed; do not overwrite silently |
+| `shape` | Produce a design brief, no code | `impeccable-runtime.md`, register reference | no | no | blocked |
+| `craft` | Create a new page or HTML artifact | `impeccable-runtime.md`, `design-rubric.md`, register reference | run when target exists | required when feasible | allowed |
+| `critique` | Review before changing | `impeccable-runtime.md`, `design-rubric.md` | required when target scan possible | required when feasible | blocked unless user asks fixes |
+| `audit` | Technical quality, a11y, responsive, performance, DESIGN.md lint | `impeccable-runtime.md`, `design-rubric.md` | required | required when feasible | blocked unless user asks fixes |
+| `polish` | Fix drift and final craft | `impeccable-runtime.md`, `design-rubric.md` | required when target scan possible | required when feasible | allowed |
+| `harden` | Stress real content and edge states | `impeccable-runtime.md`, `design-rubric.md` | optional | required when feasible | allowed |
+| `typeset` | Typography, CJK, resume/report/print readability | `impeccable-runtime.md`, `resume-html-design.md` for print/resume | optional | required for visual artifacts | allowed |
+| `layout` | Hierarchy, grid, density, spacing rhythm | `impeccable-runtime.md`, `design-rubric.md` | optional | required when feasible | allowed |
+| `colorize` | Palette roles, contrast, color strategy | `impeccable-runtime.md`, `design-rubric.md`, `design-md-contract.md` if tokens change | run DESIGN.md lint after token changes | required when feasible | allowed |
+| `adapt` | Multi-device adaptation, container queries, mobile collapse | `impeccable-runtime.md`, `design-rubric.md` | optional | required across target viewports | allowed |
+
+Register loading:
+
+- `brand`: marketing, landing, portfolio, campaign, long-form, where design is the product.
+- `product`: app UI, dashboard, admin, tool, form, settings, where design serves repeated work.
+- `document`/`resume`: print, report, resume, PDF-bound HTML; dense readability wins.
+
+## Reference Loading Rules
+
+Hard rules:
+
+- All design tasks: load `references/impeccable-runtime.md`; if missing, load `references/impeccable-internalized.md`.
+- Any task that uses or creates `DESIGN.md`: load `references/design-md-contract.md`.
+- Creating or updating `DESIGN.md`: load `references/design-md-template.md`.
+- `critique`, `polish`, and `audit`: load `references/design-rubric.md`.
+- `resume`, `print`, or `PDF`: load `references/resume-html-design.md` and hand off to `html-to-pdf-qa` for export.
+- Project `DESIGN.md` outranks vendored references for concrete tokens/components.
+- Project `PRODUCT.md` outranks assumptions for register, users, purpose, anti-references, and strategic design principles.
+
+## DESIGN.md Rules
+
+When creating or updating `DESIGN.md`:
+
+- Follow Google DESIGN.md structure: YAML frontmatter plus Markdown body.
+- Frontmatter is machine-readable tokens; Markdown prose explains why/how.
+- Token refs use `{colors.primary}` style paths.
+- Component token properties are limited to: `backgroundColor`, `textColor`, `typography`, `rounded`, `padding`, `size`, `height`, `width`.
+- Fold awesome-design-md-style guidance into Google-compatible sections or put extra detail in `DESIGN.json` / `docs/DESIGN-EXTENDED.md`.
+- After changes, try `npx @google/design.md lint DESIGN.md --format json` through `run-design-audit.mjs`.
 
 ## PDF Integration
 
-When the user asks to convert HTML to PDF, export a resume PDF, or deliver print-ready output:
+For resume, report, or print HTML:
 
-1. Finish the HTML/CSS design pass first.
-2. Invoke the `html-to-pdf-qa` skill or follow its workflow.
-3. Render the generated PDF to page images.
-4. Inspect every page, regardless of page count.
-5. Fix excessive blank space, unreadable font size, awkward breaks, clipping, weak alignment, or poor density before final delivery.
+1. Finish the HTML/CSS design pass.
+2. Invoke the `html-to-pdf-qa` skill or equivalent workflow.
+3. Export PDF, render every PDF page to images, and inspect every page.
+4. Fix unreadable font size, clipped text, awkward page breaks, excessive blank space, weak density, and Chinese-English wrapping before final delivery.
 
-Do not assume the target is two pages. The target page count depends on content, purpose, readability, and visual balance.
+Do not assume the target is one page or two pages. Page count follows content, purpose, readability, and visual balance.
 
 ## Output Standard
 
-For design or HTML work, report:
+Final reports must stay short and include:
 
-- files changed or created
-- the design system choices that matter
-- visual QA performed
-- remaining tradeoffs, if any
+```text
+Changed:
+- ...
 
-For PDF work, also report:
+Context used:
+- PRODUCT.md: yes/no
+- DESIGN.md: yes/no
+- References: ...
 
-- PDF path
-- page count
-- rendered-page QA result
+Runtime checks:
+- impeccable CLI: ran/skipped + reason
+- DESIGN.md lint: ran/skipped + reason
+- browser/screenshot QA: ran/skipped + reason
+- PDF QA: ran/skipped + reason
 
-Keep the report short and concrete.
+Design decisions:
+- register
+- typography
+- color strategy
+- layout/density
+- component states
+
+Remaining tradeoffs:
+- ...
+```
+
+Language rules:
+
+- Say `ran Impeccable CLI` only if `npx impeccable...` actually ran.
+- Say `used Impeccable runtime fallback reference` when using `references/impeccable-runtime.md`.
+- Say `applied Impeccable-style internal rules` only for local heuristic application.
+- Do not say "used Impeccable" ambiguously.

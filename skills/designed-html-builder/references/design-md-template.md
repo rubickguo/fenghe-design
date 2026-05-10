@@ -1,93 +1,128 @@
 # DESIGN.md Template
 
-Create or update a project-level `DESIGN.md` when the design direction should persist across future edits. Keep it concrete enough to guide implementation and short enough that future agents will actually follow it.
+Use this template when creating or replacing a project-level `DESIGN.md`. Replace placeholders with actual project values. Do not leave placeholder tokens in committed output.
 
 ```markdown
-# DESIGN.md
+---
+version: alpha
+name: [Project Name]
+description: [One-line visual system description]
+colors:
+  primary: "#3158D4"
+  background: "#F8F7F4"
+  surface: "#FFFFFF"
+  text: "#171717"
+  muted: "#666A73"
+  border: "#DADDE3"
+  success: "#1F8A4C"
+  warning: "#B76E00"
+  danger: "#C83A32"
+typography:
+  display:
+    fontFamily: "[Display Font], system-ui, sans-serif"
+    fontSize: "48px"
+    fontWeight: 650
+    lineHeight: 1.08
+    letterSpacing: "-0.02em"
+  headline:
+    fontFamily: "[UI Font], system-ui, sans-serif"
+    fontSize: "28px"
+    fontWeight: 650
+    lineHeight: 1.2
+    letterSpacing: "-0.01em"
+  body:
+    fontFamily: "[UI Font], system-ui, sans-serif"
+    fontSize: "16px"
+    fontWeight: 400
+    lineHeight: 1.6
+    letterSpacing: "0"
+  label:
+    fontFamily: "[UI Font], system-ui, sans-serif"
+    fontSize: "13px"
+    fontWeight: 600
+    lineHeight: 1.3
+    letterSpacing: "0"
+rounded:
+  sm: "4px"
+  md: "8px"
+  lg: "12px"
+  full: "9999px"
+spacing:
+  xs: "4px"
+  sm: "8px"
+  md: "16px"
+  lg: "24px"
+  xl: "32px"
+  section: "64px"
+components:
+  button-primary:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.background}"
+    typography: "{typography.label}"
+    rounded: "{rounded.md}"
+    padding: "8px 16px"
+  button-primary-hover:
+    backgroundColor: "{colors.text}"
+    textColor: "{colors.background}"
+    typography: "{typography.label}"
+    rounded: "{rounded.md}"
+    padding: "8px 16px"
+  card:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.text}"
+    typography: "{typography.body}"
+    rounded: "{rounded.lg}"
+    padding: "24px"
+  input:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.text}"
+    typography: "{typography.body}"
+    rounded: "{rounded.md}"
+    padding: "10px 12px"
+---
 
-## Visual Theme And Atmosphere
+# Design System: [Project Name]
 
-Describe the product feeling in concrete terms. Include what it should not feel like.
+## Overview
 
-## Audience And Use Context
+Describe the visual atmosphere, audience, reading context, and product register. Include what this system must not feel like. Fold any agent prompt guidance here or into Do's and Don'ts.
 
-Who uses this page, what they are trying to do, and how often they use it.
+## Colors
 
-## Color Palette And Roles
+Describe each color role and where it is allowed. Keep token names aligned with the YAML frontmatter. Explain palette strategy: restrained, committed accent, full palette, or immersive/drenched.
 
-- `background`:
-- `surface`:
-- `surface-muted`:
-- `text`:
-- `text-muted`:
-- `border`:
-- `accent`:
-- `focus`:
-- `success`:
-- `warning`:
-- `danger`:
+## Typography
 
-Explain where each role is allowed.
+Define hierarchy, font family intent, role usage, line height, line length, numeric behavior, and CJK/mixed-language wrapping rules. For product UI, prefer stable fixed scales. For brand/content surfaces, fluid display type is allowed when it preserves readable measure.
 
-## Typography Rules
+## Layout
 
-- Font stack:
-- Page title:
-- Section title:
-- Body:
-- Metadata:
-- Control labels:
-- Line height:
-- Chinese-English wrapping rules:
-- Maximum readable line length:
+Define page width, grid, spacing rhythm, density, responsive behavior, mobile collapse, and print behavior if relevant. This is where awesome-design-md-style Responsive Behavior should be folded.
 
-## Layout Principles
+## Elevation & Depth
 
-- Page width:
-- Grid:
-- Section rhythm:
-- Density:
-- Mobile behavior:
-- Print behavior, if relevant:
+Define shadows, borders, tonal layers, dividers, focus rings, and when each is allowed. If the system is flat, state the alternative hierarchy mechanism.
 
-## Component Styling
+## Shapes
 
-Define buttons, inputs, tabs, cards, tables, lists, dialogs, and empty states that appear in this project.
+Define radius vocabulary and shape language for cards, controls, tags, images, dialogs, and print/document containers.
 
-For each recurring component, specify:
+## Components
 
-- purpose
-- anatomy
-- spacing and sizing
-- allowed variants
-- hover/focus/selected/disabled/loading/empty/error states
-- responsive behavior
+Describe recurring components, their anatomy, sizing, variants, and states: default, hover, focus, active, disabled, loading, error, empty, selected. Keep unsupported implementation details in prose or sidecar, not component frontmatter properties.
 
-## Depth And Elevation
+## Do's and Don'ts
 
-Define when shadows, borders, surfaces, and dividers are allowed.
-
-## Do And Don't
-
-Do:
-- 
-
-Don't:
-- 
-
-## Responsive Behavior
-
-Describe exact layout changes for mobile, tablet, and desktop.
-
-## Agent Prompt Guide
-
-When editing UI in this project, preserve these design rules and verify the changed screen visually before final response.
+- Do preserve the token roles before introducing new colors or type sizes.
+- Do verify long text, CJK/mixed language wrapping, and narrow mobile widths.
+- Do run DESIGN.md lint after token changes when the CLI is available.
+- Don't imitate another brand identity directly.
+- Don't use decorative blobs, gradient text, side-stripe cards, or nested cards as default hierarchy.
+- Don't claim runtime checks ran unless they actually ran.
 ```
 
-## Usage Notes
+## Notes
 
-- Do not blindly imitate another brand's visible identity.
-- Adapt references to the user's content, audience, and product category.
-- A good `DESIGN.md` should prevent drift: typography, color roles, spacing, and component rules matter more than vague adjectives.
-- If an existing UI already has patterns, extract and formalize them before adding new ones.
-- If the existing system is weak, state the proposed design contract explicitly before broad edits.
+- The YAML frontmatter is the machine layer. Keep it valid and token-oriented.
+- The Markdown body is the application layer. Put responsive behavior, agent guidance, component state explanations, and print/CJK notes there.
+- If extra structure is valuable but not Google-spec shaped, write it to `DESIGN.json` or `docs/DESIGN-EXTENDED.md`.

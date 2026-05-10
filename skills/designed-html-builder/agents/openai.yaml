@@ -1,4 +1,4 @@
 interface:
   display_name: "Designed HTML Builder"
-  short_description: "HTML, resume, DESIGN.md, and visual QA workflow"
-  default_prompt: "Design or improve this website, HTML page, or resume by first classifying the surface, applying the right design mode, creating or following DESIGN.md guidance when useful, and running visual QA. When exporting to PDF, apply mandatory rendered-page QA."
+  short_description: "Executable HTML design workflow with runtime audits"
+  default_prompt: "Design or improve this website, HTML page, resume, or DESIGN.md by first running the design-context loader, emitting DHB_PREFLIGHT, using Impeccable and DESIGN.md runtime checks when available, falling back honestly to vendored references when unavailable, and running visual/PDF QA as needed."
